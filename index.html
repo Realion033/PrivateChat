@@ -16,7 +16,18 @@
                 <h2><i class="fas fa-comments"></i> Private Chat</h2>
             </div>
             <div id="messages"></div>
+            
+            <!-- GIF 검색 모달 -->
+            <div id="gif-modal" class="hidden">
+                <div class="gif-header">
+                    <input type="text" id="gif-search-input" placeholder="Search Tenor GIFs..." />
+                    <button id="close-gif-modal"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="gif-results"></div>
+            </div>
+
             <div id="input-area">
+                <button id="gif-button" title="Send GIF"><i class="fas fa-icons"></i></button>
                 <input type="text" id="nickname-input" placeholder="Nickname" maxlength="12" />
                 <input type="text" id="message-input" placeholder="Type your message..." />
                 <button id="send-button"><i class="fas fa-paper-plane"></i></button>

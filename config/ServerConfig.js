@@ -1,16 +1,21 @@
+require('dotenv').config();
+
 class ServerConfig {
     constructor() {
-        // 서버 설정
+        // 서버 설정 (.env에서 가져오기)
         this.PORT = process.env.PORT || 3000;
-        this.HOST = '0.0.0.0'; // 모든 인터페이스에서 접속 허용
+        this.HOST = process.env.HOST || '0.0.0.0';
         
-        // EC2 IP 정보
-        this.PRIVATE_IP = '172.31.66.77';  // EC2 내부 IP
-        this.PUBLIC_IP = '98.84.30.95';    // EC2 외부 IP (사용자 접속용)
+        // EC2 IP 정보 (.env에서 가져오기)
+        this.PRIVATE_IP = process.env.PRIVATE_IP || '172.31.66.77';
+        this.PUBLIC_IP = process.env.PUBLIC_IP || '98.84.30.95';
         
         // 환경 설정
         this.IS_PRODUCTION = process.env.NODE_ENV === 'production';
-        this.TRUST_PROXY = true; // 프록시 뒤에서 실제 IP 가져오기
+        this.TRUST_PROXY = true;
+        
+        // Tenor API 설정
+        this.TENOR_API_KEY = process.env.TENOR_API_KEY || 'LIVD';
     }
 
     // 서버 정보 출력

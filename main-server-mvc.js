@@ -28,6 +28,13 @@ const userController = new UserController(webSocketServer);
 // 라우트 설정
 app.use('/', routes);
 
+// 클라이언트 설정 제공 API
+app.get('/config', (req, res) => {
+    res.json({
+        wsUrl: `ws://${config.PUBLIC_IP}:${config.PORT}`
+    });
+});
+
 // WebSocket 연결 이벤트
 webSocketServer.on('connection', (ws, req) => {
     // 실제 클라이언트 IP 가져오기 (프록시 환경 고려)
