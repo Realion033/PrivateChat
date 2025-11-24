@@ -5,17 +5,18 @@ const http = require('http');
 const routes = require('./routes');
 const MessageController = require('./controllers/MessageController');
 const UserController = require('./controllers/UserController');
+const ServerConfig = require('./config/ServerConfig');
+
+// 서버 설정 초기화
+const config = new ServerConfig();
 
 // 프록시 뒤에서 실제 IP 가져오기 (EC2/Nginx 환경)
-app.set('trust proxy', true);
+app.set('trust proxy', config.TRUST_PROXY);
 
 app.use(express.static('.'));
 
 // HTTP 서버 생성
 const server = http.createServer(app);
-
-// 포트 설정
-const PORT = process.env.PORT || 3000;
 
 // WebSocket 서버 생성
 const webSocketServer = new WebSocket.Server({ server });
@@ -66,9 +67,10 @@ webSocketServer.on('connection', (ws, req) => {
     });
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`✅ 서버 실행 중: http://0.0.0.0:${PORT}`);
-    console.log(`✅ WebSocket: 같은 포트(${PORT})에서 실행`);
+server.listen(config.PORT, config.HOST, () => {
+    config.printServerInfo();
+    console.log(`✅ 서버 실행 중: http://${config.HOST}:${config.PORT}`);
+    console.log(`✅ 외부 접속: http://${config.PUBLIC_IP}:${config.PORT}`);
+    console.log(`✅ WebSocket: 같은 포트에서 실행`);
     console.log(`✅ MVC 패턴 적용 완료`);
-    console.log(`📡 외부 접속 허용 (EC2/프로덕션 모드)`);
 });
