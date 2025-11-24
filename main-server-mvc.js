@@ -66,7 +66,7 @@ webSocketServer.on('connection', (ws, req) => {
     });
 });
 
-server.listen(PORT, '98.84.30.95', () => {
+server.listen(PORT, '172.31.66.77', () => {
     console.log(`✅ 서버 실행 중: http://0.0.0.0:${PORT}`);
     console.log(`✅ WebSocket: 같은 포트(${PORT})에서 실행`);
     console.log(`✅ MVC 패턴 적용 완료`);
