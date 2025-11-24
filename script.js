@@ -47,12 +47,18 @@ function setupWebSocketHandlers() {
             // 초기 메시지 목록
             messagesDiv.innerHTML = "";
             data.messages.forEach((msg) => {
-                addMessage(msg, false);
+                // 초기 메시지에서도 내 닉네임인지 확인
+                const myNickname = nickname.value.trim();
+                const isOwn = myNickname && msg.startsWith(myNickname + " : ");
+                addMessage(msg, isOwn);
             });
         }
         else if (data.type === "new") {
             // 새 메시지 하나 추가
-            addMessage(data.message, false);
+            // 내 닉네임과 비교하여 isOwn 결정
+            const myNickname = nickname.value.trim();
+            const isOwn = myNickname && data.message.startsWith(myNickname + " : ");
+            addMessage(data.message, isOwn);
         }
     };
 
@@ -182,14 +188,19 @@ async function searchGifs(query) {
         gifResults.innerHTML = "";
         
         if (data.results) {
+            // DocumentFragment를 사용하여 렌더링 최적화 (한 번에 DOM 추가)
+            const fragment = document.createDocumentFragment();
+            
             data.results.forEach(gif => {
                 const img = document.createElement("img");
                 // tinygif가 로딩이 빠름
                 img.src = gif.media_formats.tinygif.url; 
                 img.className = "gif-item";
                 img.onclick = () => sendGif(gif.media_formats.gif.url);
-                gifResults.appendChild(img);
+                fragment.appendChild(img);
             });
+            
+            gifResults.appendChild(fragment);
         }
     } catch (error) {
         console.error("GIF 검색 실패:", error);
@@ -206,10 +217,7 @@ function sendGif(url) {
     if (webSocket.readyState === WebSocket.OPEN) {
         const fullMessage = `${nicknameValue} : ${url}`;
         
-        // 내 화면에 표시
-        addMessage(fullMessage, true);
-        
-        // 전송
+        // 전송 (내 화면 표시는 onmessage에서 처리)
         webSocket.send(fullMessage);
         
         // 모달 닫기
