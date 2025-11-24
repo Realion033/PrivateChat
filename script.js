@@ -75,7 +75,7 @@ sendButton.addEventListener("click", () => {
             return;
         }
         // // 내 메시지 먼저 화면에 표시
-        // const fullMessage = `${nicknameValue} : ${message}`;
+        const fullMessage = `${nicknameValue} : ${message}`;
         // addMessage(fullMessage, true);
         
         // WebSocket으로 전송
