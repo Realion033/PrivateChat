@@ -74,9 +74,9 @@ sendButton.addEventListener("click", () => {
             alert("Nickname must be 12 characters or less.");
             return;
         }
-        // 내 메시지 먼저 화면에 표시
-        const fullMessage = `${nicknameValue} : ${message}`;
-        addMessage(fullMessage, true);
+        // // 내 메시지 먼저 화면에 표시
+        // const fullMessage = `${nicknameValue} : ${message}`;
+        // addMessage(fullMessage, true);
         
         // WebSocket으로 전송
         webSocket.send(fullMessage);
