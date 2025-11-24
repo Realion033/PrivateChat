@@ -118,16 +118,6 @@ function addMessage(fullMessage, isOwn) {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
-// 연결 종료
-webSocket.onclose = () => {
-    console.log("❌ WebSocket connection closed");
-};
-
-// 에러
-webSocket.onerror = (error) => {
-    console.error("WebSocket error:", error);
-};
-
 // 메시지 보내기
 sendButton.addEventListener("click", () => {
     const message = input.value.trim();

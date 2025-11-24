@@ -42,8 +42,7 @@ class MessageController {
 
     // 초기 메시지 목록 가져오기
     getInitialMessages() {
-        return 0;
-        //return MessageModel.getAll();
+        return MessageModel.getAll();
     }
 
     // 브로드캐스트
