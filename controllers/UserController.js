@@ -25,9 +25,9 @@ class UserController {
         );
     }
 
-    // 입장 메시지 브로드캐스트
+    // 입퇴장 메시지 브로드캐스트
     broadcastJoin() {
-        const joinMessage = `New user joined! Current Users: ${UserModel.getCount()}`;
+        const joinMessage = `[New user joined! Current Users: ${UserModel.getCount()}]`;
         
         this.wss.clients.forEach((client) => {
             if (client.readyState === 1) { // WebSocket.OPEN
@@ -35,6 +35,21 @@ class UserController {
                     JSON.stringify({
                         type: 'join',
                         message: joinMessage,
+                    })
+                );
+            }
+        });
+    }
+
+    broadcastLeave() {
+        const leaveMessage = `[A user left! Current Users: ${UserModel.getCount()}]`;
+
+        this.wss.clients.forEach((client) => {
+            if (client.readyState === 1) { // WebSocket.OPEN
+                client.send(
+                    JSON.stringify({
+                        type: 'left',
+                        message: left,
                     })
                 );
             }

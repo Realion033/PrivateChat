@@ -10,6 +10,38 @@ const gifResults = document.getElementById("gif-results");
 
 let webSocket;
 
+// 쿠키 관련 함수
+function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+function getCookie(name) {
+    const cname = name + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(cname) == 0) {
+            return c.substring(cname.length, c.length);
+        }
+    }
+    return "";
+}
+
+// 페이지 로드 시 저장된 닉네임 불러오기
+window.onload = () => {
+    const savedNickname = getCookie("chat_nickname");
+    if (savedNickname) {
+        nickname.value = savedNickname;
+    }
+};
+
 // 서버에서 설정 가져와서 연결
 fetch('/config')
     .then(response => response.json())
@@ -46,12 +78,12 @@ function setupWebSocketHandlers() {
         else if (data.type === "init") {
             // 초기 메시지 목록
             messagesDiv.innerHTML = "";
-            data.messages.forEach((msg) => {
-                // 초기 메시지에서도 내 닉네임인지 확인
-                const myNickname = nickname.value.trim();
-                const isOwn = myNickname && msg.startsWith(myNickname + " : ");
-                addMessage(msg, isOwn);
-            });
+            // data.messages.forEach((msg) => {
+            //     // 초기 메시지에서도 내 닉네임인지 확인
+            //     const myNickname = nickname.value.trim();
+            //     const isOwn = myNickname && msg.startsWith(myNickname + " : ");
+            //     addMessage(msg, isOwn);
+            // });
         }
         else if (data.type === "new") {
             // 새 메시지 하나 추가
@@ -136,6 +168,9 @@ sendButton.addEventListener("click", () => {
             alert("Nickname must be 12 characters or less.");
             return;
         }
+
+        // 닉네임 쿠키에 저장 (30일간 유지)
+        setCookie("chat_nickname", nicknameValue, 30);
 
         const fullMessage = `${nicknameValue} : ${message}`;
 
